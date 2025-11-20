@@ -1,0 +1,32 @@
+---
+- name: Create a new user and configure docker access
+  hosts: servers
+  become: yes
+
+  vars:
+    new_username: devuser
+
+  tasks:
+    - name: Create user
+      ansible.builtin.user:
+        name: "{{ new_username }}"
+        state: present
+        shell: /bin/bash
+        groups: sudo,docker
+        append: yes
+
+    - name: Create .ssh folder
+      ansible.builtin.file:
+        path: "/home/{{ new_username }}/.ssh"
+        state: directory
+        owner: "{{ new_username }}"
+        group: "{{ new_username }}"
+        mode: 0700
+
+    - name: Add SSH public key
+      ansible.builtin.copy:
+        content: "{{ lookup('env', 'SSH_PUBLIC_KEY') }}"
+        dest: "/home/{{ new_username }}/.ssh/authorized_keys"
+        owner: "{{ new_username }}"
+        group: "{{ new_username }}"
+        mode: 0600
