@@ -11,7 +11,8 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "subnet" {
-  name                 = "tf-demo-subnet"resource "azurerm_resource_group" "rg" {
+  name     = "tf-demo-subnet"
+  resource "azurerm_resource_group" "rg" 
   name     = "tf-demo-rg"
   location = "Central India"
 }
@@ -130,4 +131,5 @@ resource "azurerm_linux_virtual_machine" "vm" {
     sku       = "20_04-lts"
     version   = "latest"
   }
+
 }
